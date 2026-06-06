@@ -8,8 +8,14 @@ services:
       - .env
   api_gateway:
     build:
-      context: ./apps/api-gateway
+      context: ./apps/api-gateway/
       dockerfile: ./Dockerfile
+  events_microservice:
+    build:
+      context: ./apps/events-microservice/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - events_database
   users_database:
     image: postgres
     env_file:

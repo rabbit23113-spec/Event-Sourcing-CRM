@@ -12,6 +12,10 @@ module.exports = {
   plugins: [
     new NxAppWebpackPlugin({
       target: 'node',
+      externalsPresets: { node: true },
+      externals: {
+        typeorm: "commonjs typeorm"
+      },
       compiler: 'tsc',
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',
