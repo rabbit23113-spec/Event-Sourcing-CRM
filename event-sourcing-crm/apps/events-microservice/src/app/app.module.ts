@@ -7,12 +7,12 @@ import Event from "./entities/event.entity";
 
 @Module({
   imports: [TypeOrmModule.forRoot({
-    type: constants.type,
-    host: constants.host,
-    port: constants.port,
-    username: constants.user,
-    password: constants.password,
-    database: constants.name,
+    type: constants.DATABASE_TYPE,
+    host: constants.DATABASE_HOST,
+    port: constants.DATABASE_PORT,
+    username: constants.DATABASE_USER,
+    password: constants.DATABASE_PASSWORD,
+    database: constants.DATABASE_NAME,
     synchronize: true,
     entities: [Event]
   })],
