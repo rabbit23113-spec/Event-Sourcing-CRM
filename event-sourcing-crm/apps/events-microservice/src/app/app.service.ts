@@ -1,8 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from "@nestjs/typeorm";
+import EventEntity from "./entities/event.entity";
+import {Repository} from "typeorm";
+import CreateEventDto from "./dto/create-event.dto";
 
 @Injectable()
 export class AppService {
-  getData(): { message: string } {
-    return { message: 'Hello API' };
+  constructor(@InjectRepository(EventEntity) private readonly eventsRepo: Repository<EventEntity>) {
+  }
+
+  async findAll(): Promise<EventEntity[]> {
+    const events: EventEntity[] = await this.eventsRepo.find()
+    if (!events) throw new NotFoundException("No events found");
+    return events;
+  }
+
+  async findOne(id: string): Promise<EventEntity> {
+    const target: EventEntity | null = await this.eventsRepo.findOneBy({id})
+    if (!target) throw new NotFoundException("Not found");
+    return target;
+  }
+
+  async createOne(dto: CreateEventDto): Promise<EventEntity> {
+    const target: EventEntity | null = await this.eventsRepo.create(dto);
+    if (!target) throw new NotFoundException("Something went wrong");
+    await this.eventsRepo.save(dto);
+    return target;
   }
 }
