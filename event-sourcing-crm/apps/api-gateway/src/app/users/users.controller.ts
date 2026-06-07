@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {ApiOperation, ApiQuery, ApiResponse} from "@nestjs/swagger";
 import {UserDto} from "../dto/users/user.dto";
@@ -49,7 +49,7 @@ export class UsersController {
 
   @ApiOperation({summary: "Update user"})
   @ApiResponse({status: 204})
-  @Post("update")
+  @Patch("update")
   async updateOne(@Body() body: UpdateUserDto): Promise<void> {
     await this.usersService.updateUser(body);
   }
