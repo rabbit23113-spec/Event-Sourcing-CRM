@@ -4,3 +4,6 @@ export const RMQ_PASS = ""
 export const RMQ_CONTAINER = ""
 export const RMQ_PORT = ""
 export const RMQ_CLIENT_ID = ""
+
+export const REDIS_HOST=""
+export const REDIS_PORT=1234
