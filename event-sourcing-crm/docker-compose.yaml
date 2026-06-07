@@ -18,12 +18,20 @@ services:
       - "3000:3000"
     depends_on:
       - events_microservice
+      - users_microservice
   events_microservice:
     build:
       context: ./apps/events-microservice/
       dockerfile: ./Dockerfile
     depends_on:
       - events_database
+      - crm_rabbitmq
+  users_microservice:
+    build:
+      context: ./apps/users-microservice/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - users_database
       - crm_rabbitmq
   users_database:
     image: postgres

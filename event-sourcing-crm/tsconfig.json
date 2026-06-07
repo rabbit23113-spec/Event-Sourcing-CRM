@@ -14,6 +14,12 @@
     },
     {
       "path": "./apps/events-microservice"
+    },
+    {
+      "path": "./apps/users-microservice-e2e"
+    },
+    {
+      "path": "./apps/users-microservice"
     }
   ]
 }
