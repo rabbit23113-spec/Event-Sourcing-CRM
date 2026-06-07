@@ -22,6 +22,4 @@ export class AppController {
   async createOne(@Payload() payload: { dto: CreateEventDto }) {
     return await this.appService.createOne(payload.dto)
   }
-
-
 }
