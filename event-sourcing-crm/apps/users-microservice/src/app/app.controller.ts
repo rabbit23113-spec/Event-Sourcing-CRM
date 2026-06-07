@@ -1,12 +1,41 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { AppService } from './app.service';
+import {EventPattern, MessagePattern, Payload} from "@nestjs/microservices";
+import {UserEntity} from "./entities/user.entity";
+import {CreateUserDto} from "./dto/create-user.dto";
+import {UpdateUserDto} from "./dto/update-user.dto";
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getData() {
-    return this.appService.getData();
+  @MessagePattern({ cmd: "users.microservice: findAll" })
+  async findAll(): Promise<UserEntity[]> {
+    return await this.appService.findAll();
+  }
+
+  @MessagePattern({ cmd: "users.microservice: findOne" })
+  async findOne(@Payload() payload: { id: string }) {
+    return await this.appService.findOne(payload.id);
+  }
+
+  @MessagePattern({ cmd: "users.microservice: findOneByEmail" })
+  async findOneByEmail(@Payload() payload: { email: string }) {
+    return await this.appService.findOneByEmail(payload.email);
+  }
+
+  @MessagePattern({ cmd: "users.microservice: createUser" })
+  async createUser(@Payload() payload: { dto: CreateUserDto }) {
+    return await this.appService.createUser(payload.dto)
+  }
+
+  @EventPattern({ cmd: "users.microservice: updateOne" })
+  async updateOne(@Payload() payload: { dto: UpdateUserDto }) {
+    return await this.appService.updateUser(payload.dto)
+  }
+
+  @EventPattern({ cmd: "users.microservice: deleteOne" })
+  async deleteOne(@Payload() payload: { id: string }) {
+    return await this.appService.deleteUser(payload.id);
   }
 }
