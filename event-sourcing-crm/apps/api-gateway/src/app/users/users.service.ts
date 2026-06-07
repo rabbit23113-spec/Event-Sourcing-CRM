@@ -5,7 +5,7 @@ import {CACHE_MANAGER} from "@nestjs/cache-manager";
 import type {Cache} from "cache-manager";
 import {UserDto} from "../dto/users/user.dto";
 import {firstValueFrom} from "rxjs";
-import {CreateUserDto} from "../dto/users/create-user.dto";
+import {CreateUserDto, Role} from "../dto/users/create-user.dto";
 import {UpdateUserDto} from "../dto/users/update-user.dto";
 
 @Injectable()
@@ -41,6 +41,16 @@ export class UsersService {
     const result: UserDto = await firstValueFrom(this.client.send({cmd: "users.microservice: findOneByEmail"}, {email}))
     await this.cache.set(`users:${email}`, result);
     return result;
+  }
+
+  async findByRole(role: Role): Promise<UserDto[]> {
+    const cachedUsers: UserDto[] | undefined = await this.cache.get(`users:${role}`);
+    if (cachedUsers) {
+      return cachedUsers
+    }
+    const users: UserDto[] = await firstValueFrom(this.client.send({cmd: "users.microservice: findByRole"}, {role}))
+    await this.cache.set(`users:${role}`, users);
+    return users;
   }
 
   async createUser(dto: CreateUserDto): Promise<UserDto> {

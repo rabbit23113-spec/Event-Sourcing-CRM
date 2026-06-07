@@ -2,7 +2,7 @@ import {Body, Controller, Delete, Get, Param, Post, Query} from '@nestjs/common'
 import {UsersService} from './users.service';
 import {ApiOperation, ApiQuery, ApiResponse} from "@nestjs/swagger";
 import {UserDto} from "../dto/users/user.dto";
-import {CreateUserDto} from "../dto/users/create-user.dto";
+import {CreateUserDto, Role} from "../dto/users/create-user.dto";
 import {UpdateUserDto} from "../dto/users/update-user.dto";
 
 @Controller('users')
@@ -10,7 +10,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {
   }
 
-  @ApiOperation({summary: "Get all users, one by id or by email"})
+  @ApiOperation({summary: "Get: all users, users by role, user by id or by email"})
   @ApiQuery({
     name: 'id',
     type: 'string',
@@ -21,13 +21,20 @@ export class UsersController {
     type: 'string',
     required: false,
   })
+  @ApiQuery({
+    name: 'role',
+    type: "string",
+    required: false,
+  })
   @ApiResponse({status: 200, type: UserDto, isArray: true})
   @Get("find")
-  async findEvents(@Query("id") id: string, @Query("email") email: string): Promise<UserDto[] | UserDto> {
+  async findEvents(@Query("id") id: string, @Query("email") email: string, @Query("role") role: Role): Promise<UserDto[] | UserDto> {
     if (id) {
       return await this.usersService.findOne(id)
     } else if (email) {
       return await this.usersService.findOneByEmail(email);
+    } else if (role) {
+      return await this.usersService.findByRole(role)
     } else {
       return await this.usersService.findAll()
     }
