@@ -13,7 +13,7 @@ import {CacheModule} from "@nestjs/cache-manager";
       transport: Transport.RMQ,
       options: {
         urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
-        queue: constants.RMQ_QUEUE,
+        queue: constants.RMQ_EVENTS_QUEUE,
         queueOptions: {
           durable: true,
         },
