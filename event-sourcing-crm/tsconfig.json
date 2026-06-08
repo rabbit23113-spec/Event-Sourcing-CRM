@@ -20,6 +20,12 @@
     },
     {
       "path": "./apps/users-microservice"
+    },
+    {
+      "path": "./apps/leads-microservice-e2e"
+    },
+    {
+      "path": "./apps/leads-microservice"
     }
   ]
 }

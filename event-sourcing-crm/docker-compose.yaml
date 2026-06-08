@@ -33,6 +33,13 @@ services:
     depends_on:
       - users_database
       - crm_rabbitmq
+  leads_microservice:
+    build:
+      context: ./apps/leads-microservice/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - leads_database
+      - crm_rabbitmq
   users_database:
     image: postgres
     env_file:

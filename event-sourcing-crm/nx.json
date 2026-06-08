@@ -56,7 +56,8 @@
       "exclude": [
         "apps/api-gateway-e2e/**/*",
         "apps/events-microservice-e2e/**/*",
-        "apps/users-microservice-e2e/**/*"
+        "apps/users-microservice-e2e/**/*",
+        "apps/leads-microservice-e2e/**/*"
       ]
     }
   ],
