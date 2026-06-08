@@ -1,8 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from "@nestjs/typeorm";
+import {LeadEntity, Status} from "./entities/lead.entity";
+import {Repository} from "typeorm";
+import {CreateLeadDto} from "./dto/create-lead.dto";
+import {UpdateLeadDto} from "./dto/update-lead.dto";
 
 @Injectable()
 export class AppService {
-  getData(): { message: string } {
-    return { message: 'Hello API' };
+  constructor (@InjectRepository(LeadEntity) private readonly leadRepo: Repository<LeadEntity>) {}
+
+  async findAll(): Promise<LeadEntity[]> {
+    return await this.leadRepo.find();
+  }
+
+  async findOne(id: string): Promise<LeadEntity> {
+    const target = await this.leadRepo.findOneBy({ id })
+    if (!target) {
+      throw new NotFoundException(`LeadEntity with id ${id} not found`);
+    }
+    return target;
+  }
+
+  async findByStatus(status: Status): Promise<LeadEntity[]> {
+    return await this.leadRepo.findBy({ status });
+  }
+
+  async findOneByName(name: string): Promise<LeadEntity> {
+    const target = await this.leadRepo.findOneBy({ name });
+    if (!target) {
+      throw new NotFoundException(`LeadEntity with name ${name} not found`);
+    }
+    return target;
+  }
+
+  async createOne(dto: CreateLeadDto): Promise<LeadEntity> {
+    const lead = await this.leadRepo.create(dto);
+    await this.leadRepo.save(lead);
+    return lead;
+  }
+
+  async updateOne(dto: UpdateLeadDto): Promise<void> {
+    const { id, name, email, phone, status, source, ownerId } = dto;
+    const target = await this.findOne(id)
+    if (!target) {
+      throw new NotFoundException(`LeadEntity with id ${id} not found`);
+    }
+    await this.leadRepo.update(id, { name, email, phone, status, source, ownerId });
+  }
+
+  async deleteOne(id: string): Promise<void> {
+    const target = await this.findOne(id);
+    if (!target) {
+      throw new NotFoundException(`LeadEntity with id ${id} not found`);
+    }
+    await this.leadRepo.delete(id);
   }
 }
