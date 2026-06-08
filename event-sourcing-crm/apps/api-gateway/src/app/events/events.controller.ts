@@ -1,8 +1,9 @@
-import {Body, Controller, Get, Post, Query} from '@nestjs/common';
+import {BadRequestException, Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {EventsService} from './events.service';
 import {EventDto} from "../dto/events/event.dto";
 import {CreateEventDto} from "../dto/events/create-event.dto";
-import {ApiOperation, ApiQuery, ApiResponse} from "@nestjs/swagger";
+import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
+import {isUUID} from "class-validator";
 
 
 @Controller('events')
@@ -10,20 +11,22 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {
   }
 
-  @ApiOperation({summary: "Get all events or one by id"})
-  @ApiQuery({
-    name: 'id',
-    type: 'string',
-    required: false,
-  })
+  @ApiOperation({summary: "Get events"})
   @ApiResponse({status: 200, type: EventDto, isArray: true})
   @Get("find")
-  async findEvents(@Query("id") id: string): Promise<EventDto[] | EventDto> {
-    if (id) {
-      return await this.eventsService.findOne(id)
-    } else {
-      return await this.eventsService.findAll();
-    }
+  async findEvents(): Promise<EventDto[]> {
+    return await this.eventsService.findAll()
+  }
+
+  @ApiOperation({summary: "Get event by id"})
+  @ApiParam({
+    name: 'id',
+  })
+  @ApiResponse({status: 200, type: EventDto})
+  @Get("find/id/:id")
+  async findOne(@Param("id") id: string): Promise<EventDto> {
+    if (!isUUID(id)) throw new BadRequestException("Invalid UUID")
+    return await this.eventsService.findOne(id)
   }
 
   @ApiOperation({summary: "Create event"})
