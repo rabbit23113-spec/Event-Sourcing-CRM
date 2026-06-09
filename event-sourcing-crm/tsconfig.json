@@ -26,6 +26,12 @@
     },
     {
       "path": "./apps/leads-microservice"
+    },
+    {
+      "path": "./apps/clients-microservice-e2e"
+    },
+    {
+      "path": "./apps/clients-microservice"
     }
   ]
 }
