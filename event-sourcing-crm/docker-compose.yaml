@@ -20,6 +20,7 @@ services:
       - events_microservice
       - users_microservice
       - leads_microservice
+      - clients_microservice
   events_microservice:
     build:
       context: ./apps/events-microservice/
