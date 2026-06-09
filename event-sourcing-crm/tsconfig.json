@@ -32,6 +32,12 @@
     },
     {
       "path": "./apps/clients-microservice"
+    },
+    {
+      "path": "./apps/deals-microservice-e2e"
+    },
+    {
+      "path": "./apps/deals-microservice"
     }
   ]
 }

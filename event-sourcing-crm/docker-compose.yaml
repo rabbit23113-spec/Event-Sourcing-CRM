@@ -49,6 +49,13 @@ services:
     depends_on:
       - clients_database
       - crm_rabbitmq
+  deals_microservice:
+    build:
+      context: ./apps/deals-microservice/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - deals_database
+      - crm_rabbitmq
   users_database:
     image: postgres
     env_file:

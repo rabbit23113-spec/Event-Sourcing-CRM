@@ -59,7 +59,8 @@
         "apps/users-microservice-e2e/**/*",
         "apps/leads-microservice-e2e/**/*",
         "apps/clients-microservice-e2e/**/*",
-        "apps/clients-microservice-e2e/**/*"
+        "apps/clients-microservice-e2e/**/*",
+        "apps/deals-microservice-e2e/**/*"
       ]
     }
   ],
