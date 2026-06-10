@@ -24,7 +24,7 @@ export class AppService {
     return target;
   }
 
-  async findOneByAuthorId(authorId: string): Promise<NoteEntity[]> {
+  async findByAuthorId(authorId: string): Promise<NoteEntity[]> {
     const target = await this.noteRepo.findBy({authorId});
     if (!target) {
       throw new NotFoundException(`NoteEntities with author id ${authorId} not found`);
@@ -32,7 +32,7 @@ export class AppService {
     return target;
   }
 
-  async findOneByClientId(clientId: string): Promise<NoteEntity[]> {
+  async findByClientId(clientId: string): Promise<NoteEntity[]> {
     const target = await this.noteRepo.findBy({clientId});
     if (!target) {
       throw new NotFoundException(`NoteEntities with client id ${clientId} not found`);
@@ -40,7 +40,7 @@ export class AppService {
     return target;
   }
 
-  async findOneByLeadId(leadId: string): Promise<NoteEntity[]> {
+  async findByLeadId(leadId: string): Promise<NoteEntity[]> {
     const target = await this.noteRepo.findBy({leadId});
     if (!target) {
       throw new NotFoundException(`NoteEntities with lead id ${leadId} not found`);
@@ -48,7 +48,7 @@ export class AppService {
     return target;
   }
 
-  async findOneByDealId(dealId: string): Promise<NoteEntity[]> {
+  async findByDealId(dealId: string): Promise<NoteEntity[]> {
     const target = await this.noteRepo.findBy({dealId});
     if (!target) {
       throw new NotFoundException(`NoteEntities with deal id ${dealId} not found`);
