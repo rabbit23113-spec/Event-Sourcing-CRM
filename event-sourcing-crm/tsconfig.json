@@ -38,6 +38,12 @@
     },
     {
       "path": "./apps/deals-microservice"
+    },
+    {
+      "path": "./apps/notes-microservice-e2e"
+    },
+    {
+      "path": "./apps/notes-microservice"
     }
   ]
 }
