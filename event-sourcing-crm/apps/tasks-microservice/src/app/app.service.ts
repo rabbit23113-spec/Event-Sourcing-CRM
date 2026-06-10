@@ -67,18 +67,49 @@ export class AppService {
   async createOne(dto: CreateTaskDto): Promise<TaskEntity> {
     const task = await this.taskRepo.create(dto);
     await this.taskRepo.save(task);
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "task", action: "created", actorId: dto.assigneeId, subjectId: task.id })
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "task",
+      action: "created",
+      actorId: dto.assigneeId,
+      subjectId: task.id
+    })
     return task;
   }
 
   async updateOne(dto: UpdateTaskDto): Promise<void> {
-    const {id, title, description, status, priority, dueDate, assigneeId, relatedLeadId, relatedClientId, relatedDealId} = dto;
+    const {
+      id,
+      title,
+      description,
+      status,
+      priority,
+      dueDate,
+      assigneeId,
+      relatedLeadId,
+      relatedClientId,
+      relatedDealId
+    } = dto;
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`TaskEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "task", action: "updated", actorId: dto.assigneeId, subjectId: target.id })
-    await this.taskRepo.update(id, {title, description, status, priority, dueDate, assigneeId, relatedLeadId, relatedClientId, relatedDealId});
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "task",
+      action: "updated",
+      actorId: dto.assigneeId,
+      subjectId: target.id
+    })
+    await this.taskRepo.update(id, {
+      title,
+      description,
+      status,
+      priority,
+      dueDate,
+      assigneeId,
+      relatedLeadId,
+      relatedClientId,
+      relatedDealId
+    });
   }
 
   async deleteOne(id: string): Promise<void> {
@@ -86,7 +117,12 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`TaskEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "task", action: "deleted", actorId: target.assigneeId, subjectId: target.id })
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "task",
+      action: "deleted",
+      actorId: target.assigneeId,
+      subjectId: target.id
+    })
     await this.taskRepo.delete(id);
   }
 }
