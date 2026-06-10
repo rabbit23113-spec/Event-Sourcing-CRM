@@ -1,4 +1,4 @@
-import {Priority, Status} from "../entities/task.entity";
+import {Priority, Status} from "./task.dto";
 
 
 export class UpdateTaskDto {
