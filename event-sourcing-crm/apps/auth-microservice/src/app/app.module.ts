@@ -5,6 +5,7 @@ import {ClientsModule, Transport} from "@nestjs/microservices";
 import * as constants from './constants/constants'
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AuthSessionEntity} from "./entities/auth-session.entity";
+import {JwtModule} from "@nestjs/jwt";
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -41,6 +42,10 @@ import {AuthSessionEntity} from "./entities/auth-session.entity";
         }
       }
     ]),
+    JwtModule.register({
+      global: true,
+      secret: constants.JWT_SECRET_KEY,
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
