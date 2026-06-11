@@ -9,7 +9,7 @@ import {AccessTokenDto} from "./dto/access-token.dto";
 import {UserDto} from "./dto/user.dto";
 import {firstValueFrom} from "rxjs";
 import {CreateAuthSessionDto} from "./dto/create-auth-session.dto";
-import {JsonWebTokenError, JwtModule, JwtService, TokenExpiredError} from "@nestjs/jwt";
+import {JwtService} from "@nestjs/jwt";
 import bcrypt from "bcrypt";
 import {SignInDto} from "./dto/sign-in.dto";
 
@@ -59,16 +59,8 @@ export class AppService {
   }
 
   async refreshAccessToken(accessToken: string): Promise<AccessTokenDto> {
-    try {
-      const payload = this.jwtService.verify(accessToken);
-      return await this.generateAccessToken(payload.sub)
-    } catch (e) {
-      if (e instanceof TokenExpiredError) {
-        throw new UnauthorizedException(e.message);
-      } else {
-        throw new UnauthorizedException("Something went wrong");
-      }
-    }
+    const payload = this.jwtService.decode(accessToken);
+    return await this.generateAccessToken(payload.sub)
   }
 
   async generateAccessToken(userId: string): Promise<AccessTokenDto> {
@@ -96,6 +88,15 @@ export class AppService {
     const user: UserDto = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findByEmail"}, {email: dto.email}))
     await this.createOne({userId: user.id, ip: "mock"})
     return await this.generateAccessToken(user.id)
+  }
+
+  async logout(accessToken: string): Promise<void> {
+    const payload = this.jwtService.decode(accessToken)
+    const authSession = await this.findByUserId(payload.sub)
+    if (!authSession) {
+      throw new NotFoundException(`Auth session with user id: ${payload.sub} not found)`);
+    }
+    await this.deleteOne(authSession.id)
   }
 
   async deleteOne(id: string): Promise<void> {
