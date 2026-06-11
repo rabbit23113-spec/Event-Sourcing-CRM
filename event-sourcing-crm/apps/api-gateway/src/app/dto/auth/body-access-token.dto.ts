@@ -1,6 +1,8 @@
 import {ApiProperty} from "@nestjs/swagger";
+import {IsJWT} from "class-validator";
 
-export class AccessTokenDto {
+export class BodyAccessTokenDto {
   @ApiProperty()
+  @IsJWT()
   accessToken: string;
 }
