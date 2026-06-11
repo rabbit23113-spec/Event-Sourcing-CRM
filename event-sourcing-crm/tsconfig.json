@@ -50,6 +50,12 @@
     },
     {
       "path": "./apps/tasks-microservice"
+    },
+    {
+      "path": "./apps/auth-microservice-e2e"
+    },
+    {
+      "path": "./apps/auth-microservice"
     }
   ]
 }
