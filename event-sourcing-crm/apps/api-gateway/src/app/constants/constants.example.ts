@@ -27,7 +27,4 @@ export const RMQ_TASKS_QUEUE = "crm_tasks_queue";
 export const RMQ_AUTH_CLIENT_ID = "crm_rabbitmq_auth_client_id";
 export const RMQ_AUTH_QUEUE = "crm_auth_queue";
 
-export const REDIS_HOST="crm_reddis"
-export const REDIS_PORT=6379
-
 export const PORT=13050

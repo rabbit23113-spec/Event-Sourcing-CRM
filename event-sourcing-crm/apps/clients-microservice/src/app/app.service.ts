@@ -6,41 +6,68 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {CreateClientDto} from "./dto/create-client.dto";
 import {UpdateClientDto} from "./dto/update-client.dto";
+import type {Cache} from "cache-manager";
+import {CACHE_MANAGER} from "@nestjs/cache-manager";
 
 @Injectable()
 export class AppService {
-  constructor(@InjectRepository(ClientEntity) private readonly leadRepo: Repository<ClientEntity>, @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy) {
+  constructor(@InjectRepository(ClientEntity) private readonly clientRepo: Repository<ClientEntity>,
+              @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
+              @Inject(CACHE_MANAGER) private readonly cache: Cache
+              ) {
   }
 
   async findAll(): Promise<ClientEntity[]> {
-    return await this.leadRepo.find();
+    const cachedClients: ClientEntity[] | undefined = await this.cache.get("clients:all")
+    if (cachedClients) {
+      return cachedClients;
+    }
+    const result = await this.clientRepo.find();
+    await this.cache.set("clients:all", result);
+    return result
   }
 
   async findOne(id: string): Promise<ClientEntity> {
-    const target = await this.leadRepo.findOneBy({id})
+    const cachedClient: ClientEntity | undefined = await this.cache.get(`clients:${id}`);
+    if (cachedClient) {
+      return cachedClient
+    }
+    const target = await this.clientRepo.findOneBy({id})
     if (!target) {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
+    await this.cache.set(`clients:${id}`, cachedClient);
     return target;
   }
 
   async findByCompanyName(companyName: string): Promise<ClientEntity[]> {
-    return await this.leadRepo.findBy({companyName});
+    const cachedClients: ClientEntity[] | undefined = await this.cache.get(`clients:${companyName}`);
+    if (cachedClients) {
+      return cachedClients;
+    }
+    const result = await this.clientRepo.findBy({companyName});
+    await this.cache.set(`clients:${companyName}`, result);
+    return result
   }
 
   async findOneByName(name: string): Promise<ClientEntity> {
-    const target = await this.leadRepo.findOneBy({name});
+    const cachedClient: ClientEntity | undefined = await this.cache.get(`clients:${name}`);
+    if (cachedClient) {
+      return cachedClient
+    }
+    const target = await this.clientRepo.findOneBy({name});
     if (!target) {
       throw new NotFoundException(`ClientEntity with name ${name} not found`);
     }
+    await this.cache.set(`clients:${name}`, cachedClient);
     return target;
   }
 
   async createOne(dto: CreateClientDto): Promise<ClientEntity> {
-    const lead = await this.leadRepo.create(dto);
-    await this.leadRepo.save(lead);
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "created", actorId: dto.ownerId, subjectId: lead.id })
-    return lead;
+    const client = await this.clientRepo.create(dto);
+    await this.clientRepo.save(client);
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "created", actorId: dto.ownerId, subjectId: client.id })
+    return client;
   }
 
   async updateOne(dto: UpdateClientDto): Promise<void> {
@@ -50,7 +77,7 @@ export class AppService {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
     this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "updated", actorId: dto.ownerId, subjectId: target.id })
-    await this.leadRepo.update(id, {name, email, phone, companyName, ownerId});
+    await this.clientRepo.update(id, {name, email, phone, companyName, ownerId});
   }
 
   async deleteOne(id: string): Promise<void> {
@@ -59,6 +86,6 @@ export class AppService {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
     this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "deleted", actorId: target.ownerId, subjectId: target.id })
-    await this.leadRepo.delete(id);
+    await this.clientRepo.delete(id);
   }
 }

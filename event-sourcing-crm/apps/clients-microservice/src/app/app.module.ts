@@ -5,6 +5,8 @@ import {ClientsModule, Transport} from "@nestjs/microservices";
 import * as constants from "./constants/constants"
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ClientEntity} from "./entities/client.entity";
+import {redisStore} from "cache-manager-redis-store";
+import {CacheModule} from "@nestjs/cache-manager";
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -29,6 +31,12 @@ import {ClientEntity} from "./entities/client.entity";
         },
       }
     }]),
+    CacheModule.register({
+      store: redisStore,
+      host: constants.REDIS_HOST,
+      port: constants.REDIS_PORT,
+      ttl: 15
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

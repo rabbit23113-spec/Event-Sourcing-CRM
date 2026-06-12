@@ -6,6 +6,8 @@ import * as constants from './constants/constants'
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AuthSessionEntity} from "./entities/auth-session.entity";
 import {JwtModule} from "@nestjs/jwt";
+import {redisStore} from "cache-manager-redis-store";
+import {CacheModule} from "@nestjs/cache-manager";
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -45,6 +47,12 @@ import {JwtModule} from "@nestjs/jwt";
     JwtModule.register({
       global: true,
       secret: constants.JWT_SECRET_KEY,
+    }),
+    CacheModule.register({
+      store: redisStore,
+      host: constants.REDIS_HOST,
+      port: constants.REDIS_PORT,
+      ttl: 15
     })
   ],
   controllers: [AppController],

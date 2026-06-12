@@ -12,33 +12,52 @@ import {CreateAuthSessionDto} from "./dto/create-auth-session.dto";
 import {JwtService} from "@nestjs/jwt";
 import bcrypt from "bcrypt";
 import {SignInDto} from "./dto/sign-in.dto";
+import type {Cache} from "cache-manager";
+import {CACHE_MANAGER} from "@nestjs/cache-manager";
 
 @Injectable()
 export class AppService {
   constructor(@InjectRepository(AuthSessionEntity) private readonly authSessionRepo: Repository<AuthSessionEntity>,
               @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
               @Inject(RMQ_USERS_CLIENT_ID) private readonly usersClient: ClientProxy,
-              private readonly jwtService: JwtService
+              private readonly jwtService: JwtService,
+              @Inject(CACHE_MANAGER) private readonly cache: Cache
   ) {
   }
 
   async findAll(): Promise<AuthSessionEntity[]> {
-    return await this.authSessionRepo.find();
+    const cachedAuthSessions: AuthSessionEntity[] | undefined = await this.cache.get(`authSessions:all`)
+    if (cachedAuthSessions) {
+      return cachedAuthSessions;
+    }
+    const result = await this.authSessionRepo.find();
+    await this.cache.set(`authSessions:all`, result);
+    return result;
   }
 
   async findOne(id: string): Promise<AuthSessionEntity> {
+    const cachedAuthSessions: AuthSessionEntity | undefined = await this.cache.get(`authSessions:${id}`)
+    if (cachedAuthSessions) {
+      return cachedAuthSessions;
+    }
     const target: AuthSessionEntity | null = await this.authSessionRepo.findOneBy({id})
     if (!target) {
       throw new NotFoundException(`Auth session with id: ${id} not found`);
     }
+    await this.cache.set(`authSessions:${id}`, target);
     return target;
   }
 
   async findByUserId(userId: string): Promise<AuthSessionEntity> {
+    const cachedAuthSessions: AuthSessionEntity | undefined = await this.cache.get(`authSessions:${userId}`)
+    if (cachedAuthSessions) {
+      return cachedAuthSessions;
+    }
     const target = await this.authSessionRepo.findOneBy({userId})
     if (!target) {
       throw new NotFoundException(`Auth session with user id: ${userId} not found`);
     }
+    await this.cache.set(`authSessions:${userId}`, target);
     return target;
   }
 

@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import {Module} from '@nestjs/common';
+import {AppController} from './app.controller';
+import {AppService} from './app.service';
 import {ClientsModule, Transport} from "@nestjs/microservices";
 import * as constants from "./constants/constants"
 import {TaskEntity} from "./entities/task.entity";
 import {TypeOrmModule} from "@nestjs/typeorm";
+import {redisStore} from "cache-manager-redis-store";
+import {CacheModule} from "@nestjs/cache-manager";
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -29,8 +31,15 @@ import {TypeOrmModule} from "@nestjs/typeorm";
         },
       }
     }]),
+    CacheModule.register({
+      store: redisStore,
+      host: constants.REDIS_HOST,
+      port: constants.REDIS_PORT,
+      ttl: 15
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+}

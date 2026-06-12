@@ -10,3 +10,6 @@ export const RMQ_USER = "guest";
 export const RMQ_PASS = "guest";
 export const RMQ_HOST = "crm_rabbitmq";
 export const RMQ_PORT = 5672;
+
+export const REDIS_HOST="crm_reddis"
+export const REDIS_PORT=6379

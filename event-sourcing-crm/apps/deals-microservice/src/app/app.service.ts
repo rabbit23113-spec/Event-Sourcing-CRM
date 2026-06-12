@@ -6,14 +6,25 @@ import {RMQ_EVENTS_CLIENT_ID} from "./constants/constants";
 import {Repository} from "typeorm";
 import {CreateDealDto} from "./dto/create-deal.dto";
 import {UpdateDealDto} from "./dto/update-deal.dto";
+import type {Cache} from "cache-manager";
+import {CACHE_MANAGER} from "@nestjs/cache-manager";
 
 @Injectable()
 export class AppService {
-  constructor(@InjectRepository(DealEntity) private readonly dealRepo: Repository<DealEntity>, @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy) {
+  constructor(@InjectRepository(DealEntity) private readonly dealRepo: Repository<DealEntity>,
+              @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
+              @Inject(CACHE_MANAGER) private readonly cache: Cache
+  ) {
   }
 
   async findAll(): Promise<DealEntity[]> {
-    return await this.dealRepo.find();
+    const cachedDeals: DealEntity[] | undefined = await this.cache.get("deals:all")
+    if (cachedDeals) {
+      return cachedDeals;
+    }
+    const result = await this.dealRepo.find();
+    await this.cache.set("deals:all", result);
+    return result;
   }
 
   async findOne(id: string): Promise<DealEntity> {
@@ -25,13 +36,24 @@ export class AppService {
   }
 
   async findByStatus(status: Status): Promise<DealEntity[]> {
-    return await this.dealRepo.findBy({status});
+    const cachedDeal: DealEntity[] | undefined = await this.cache.get(`deals:${status}`);
+    if (cachedDeal) {
+      return cachedDeal
+    }
+    const result = await this.dealRepo.findBy({status});
+    await this.cache.set(`deals:${status}`, result);
+    return result;
   }
 
   async createOne(dto: CreateDealDto): Promise<DealEntity> {
     const deal = await this.dealRepo.create(dto);
     await this.dealRepo.save(deal);
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "deal", action: "created", actorId: dto.ownerId, subjectId: deal.id })
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "deal",
+      action: "created",
+      actorId: dto.ownerId,
+      subjectId: deal.id
+    })
     return deal;
   }
 
@@ -41,7 +63,12 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`DealEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "deal", action: "updated", actorId: dto.ownerId, subjectId: target.id })
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "deal",
+      action: "updated",
+      actorId: dto.ownerId,
+      subjectId: target.id
+    })
     await this.dealRepo.update(id, {title, value, status, clientId, ownerId});
   }
 
@@ -50,7 +77,12 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`DealEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "deal", action: "deleted", actorId: target.ownerId, subjectId: target.id })
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "deal",
+      action: "deleted",
+      actorId: target.ownerId,
+      subjectId: target.id
+    })
     await this.dealRepo.delete(id);
   }
 }

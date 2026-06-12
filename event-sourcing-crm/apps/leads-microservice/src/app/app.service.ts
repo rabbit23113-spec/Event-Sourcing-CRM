@@ -6,33 +6,60 @@ import {CreateLeadDto} from "./dto/create-lead.dto";
 import {UpdateLeadDto} from "./dto/update-lead.dto";
 import {RMQ_EVENTS_CLIENT_ID} from "./constants/constants";
 import {ClientProxy} from "@nestjs/microservices";
+import type {Cache} from "cache-manager";
+import {CACHE_MANAGER} from "@nestjs/cache-manager";
 
 @Injectable()
 export class AppService {
-  constructor(@InjectRepository(LeadEntity) private readonly leadRepo: Repository<LeadEntity>, @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy) {
+  constructor(@InjectRepository(LeadEntity) private readonly leadRepo: Repository<LeadEntity>,
+              @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
+              @Inject(CACHE_MANAGER) private readonly cache: Cache
+              ) {
   }
 
   async findAll(): Promise<LeadEntity[]> {
-    return await this.leadRepo.find();
+    const cachedLeads: LeadEntity[] | undefined = await this.cache.get("leads:all")
+    if (cachedLeads) {
+      return cachedLeads;
+    }
+    const result = await this.leadRepo.find();
+    await this.cache.set("leads:all", result);
+    return result;
   }
 
   async findOne(id: string): Promise<LeadEntity> {
+    const cachedLead: LeadEntity | undefined = await this.cache.get(`leads:${id}`);
+    if (cachedLead) {
+      return cachedLead
+    }
     const target = await this.leadRepo.findOneBy({id})
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
+    await this.cache.set(`leads:${id}`, target);
     return target;
   }
 
   async findByStatus(status: Status): Promise<LeadEntity[]> {
-    return await this.leadRepo.findBy({status});
+    const cachedLeads: LeadEntity[] | undefined = await this.cache.get(`leads:${status}`);
+    if (cachedLeads) {
+      return cachedLeads;
+    }
+    const result = await this.leadRepo.findBy({status});
+    await this.cache.set(`leads:${status}`, result);
+    return result;
   }
 
   async findOneByName(name: string): Promise<LeadEntity> {
+    const cachedLead: LeadEntity | undefined = await this.cache.get(`leads:${name}`);
+    if (cachedLead) {
+      return cachedLead
+    }
     const target = await this.leadRepo.findOneBy({name});
     if (!target) {
       throw new NotFoundException(`LeadEntity with name ${name} not found`);
     }
+    await this.cache.set(`leads:${name}`, target);
     return target;
   }
 

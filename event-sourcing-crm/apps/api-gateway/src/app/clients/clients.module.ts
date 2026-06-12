@@ -3,8 +3,6 @@ import { ClientsService } from './clients.service';
 import { ClientsController } from './clients.controller';
 import * as constants from "../constants/constants";
 import {Transport} from "@nestjs/microservices";
-import {CacheModule} from "@nestjs/cache-manager";
-import {redisStore} from "cache-manager-redis-store";
 import { ClientsModule as cm} from "@nestjs/microservices";
 
 @Module({
@@ -20,12 +18,6 @@ import { ClientsModule as cm} from "@nestjs/microservices";
         },
       }
     }]),
-    CacheModule.register({
-      store: redisStore,
-      host: constants.REDIS_HOST,
-      port: constants.REDIS_PORT,
-      ttl: 60,
-    }),
   ],
   controllers: [ClientsController],
   providers: [ClientsService],

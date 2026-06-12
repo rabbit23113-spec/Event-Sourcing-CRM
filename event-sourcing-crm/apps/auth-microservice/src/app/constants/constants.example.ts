@@ -18,3 +18,6 @@ export const RMQ_USERS_CLIENT_ID = "crm_rabbitmq_users_client_id";
 export const RMQ_USERS_QUEUE = "crm_users_queue";
 
 export const JWT_SECRET_KEY = "jwt_key_example";
+
+export const REDIS_HOST="crm_reddis"
+export const REDIS_PORT=6379
