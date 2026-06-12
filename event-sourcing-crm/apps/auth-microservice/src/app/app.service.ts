@@ -78,6 +78,7 @@ export class AppService {
       domain: "auth",
       action: "created",
       subjectId: authSession.id,
+      actorId: dto.userId,
     });
     return authSession;
   }
@@ -136,7 +137,8 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "auth",
       action: "deleted",
-      subjectId: target.id
+      actorId: target.userId,
+      subjectId: target.id,
     });
     await this.authSessionRepo.delete(id)
   }
