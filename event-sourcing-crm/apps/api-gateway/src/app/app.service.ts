@@ -1,12 +1,8 @@
-import {Injectable, UseGuards} from '@nestjs/common';
-import {JwtGuard} from "./guards/jwt/jwt.guard";
-import {CurrentUser} from "./decorators/current-user.decorator";
+import {Injectable} from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  @UseGuards(JwtGuard)
-  getData(@CurrentUser() user: any): { message: string } {
-    console.log(user)
+  getData(): { message: string } {
     return ({ message: 'Hello API' });
   }
 }
