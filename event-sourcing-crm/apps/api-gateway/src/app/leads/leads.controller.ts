@@ -4,6 +4,7 @@ import {LeadDto, Status} from "../dto/leads/lead.dto";
 import {CreateLeadDto} from "../dto/leads/create-lead.dto";
 import {UpdateLeadDto} from "../dto/leads/update-lead.dto";
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
+import {UpdateStatusDto} from "../dto/leads/update-status.dto";
 
 @Controller('leads')
 export class LeadsController {
@@ -51,8 +52,15 @@ export class LeadsController {
   @ApiOperation({summary: "Update lead" })
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() updateLeadDto: UpdateLeadDto): Promise<void> {
-    return await this.leadsService.updateOne(updateLeadDto)
+  async updateOne(@Body() dto: UpdateLeadDto): Promise<void> {
+    return await this.leadsService.updateOne(dto)
+  }
+
+  @ApiOperation({summary: "Update lead by status" })
+  @ApiResponse({status: 204})
+  @Patch("update/status")
+  async updateStatus(@Body() dto: UpdateStatusDto): Promise<void> {
+    return await this.leadsService.updateStatus(dto)
   }
 
   @ApiOperation({summary: "Delete lead" })
