@@ -87,7 +87,7 @@ export class AppService {
     if (!authSession) {
       throw new UnauthorizedException(`Auth session with user id: ${userId} not found`);
     }
-    if (authSession.expiresAt.getTime() < Date.now()) {
+    if (new Date(authSession.expiresAt).getTime() < Date.now()) {
       await this.authSessionRepo.delete(authSession.id)
       throw new UnauthorizedException("Auth session is expired");
     }
@@ -98,7 +98,7 @@ export class AppService {
   }
 
   async signUp(dto: SignUpDto): Promise<AccessTokenDto> {
-    const user: UserDto = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: createOne"}, {dto}))
+    const user: UserDto = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: createUser"}, {dto}))
     await this.createOne({userId: user.id, ip: "mock"})
     return await this.generateAccessToken(user.id)
   }

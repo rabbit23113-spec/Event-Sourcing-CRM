@@ -4,8 +4,9 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    env_file:
-      - .env
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
   crm_redis:
     image: redis:7
     ports:
@@ -15,7 +16,7 @@ services:
       context: ./apps/api-gateway/
       dockerfile: ./Dockerfile
     ports:
-      - "15030:3000"
+      - "13050:13050"
     depends_on:
       - events_microservice
       - users_microservice
@@ -83,65 +84,66 @@ services:
       - crm_rabbitmq
   users_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_users_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+
   leads_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_leads_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5433:5432"
   clients_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_clients_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5434:5432"
   events_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_events_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5435:5432"
   deals_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_deals_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5436:5432"
   tasks_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_tasks_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5437:5432"
   notes_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_notes_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5438:5432"
   auth_sessions_database:
     image: postgres
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: "crm_auth_sessions_database"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5439:5432"

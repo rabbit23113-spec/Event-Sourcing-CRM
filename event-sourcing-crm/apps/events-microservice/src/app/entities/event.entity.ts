@@ -13,7 +13,7 @@ class Event {
   action: Action;
 
   @Column({name: "actor_id", nullable: true})
-  actorId: string | null;
+  actorId?: string;
 
   @Column({name: "subject_id"})
   subjectId: string;
