@@ -32,10 +32,10 @@ export class ClientsService {
   }
 
   async updateOne(dto: UpdateClientDto): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "clients.microservice: updateOne"}, {dto}))
+    this.client.emit({cmd: "clients.microservice: updateOne"}, {dto})
   }
 
   async deleteOne(id: string): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "clients.microservice: deleteOne"}, {id}))
+    this.client.emit({cmd: "clients.microservice: deleteOne"}, {id})
   }
 }

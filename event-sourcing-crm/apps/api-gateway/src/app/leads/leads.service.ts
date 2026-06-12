@@ -5,6 +5,7 @@ import {LeadDto, Status} from "../dto/leads/lead.dto";
 import {firstValueFrom} from "rxjs";
 import {CreateLeadDto} from "../dto/leads/create-lead.dto";
 import {UpdateLeadDto} from "../dto/leads/update-lead.dto";
+import {UpdateStatusDto} from "../dto/leads/update-status.dto";
 
 @Injectable()
 export class LeadsService {
@@ -32,10 +33,14 @@ export class LeadsService {
   }
 
   async updateOne(dto: UpdateLeadDto): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "leads.microservice: updateOne"}, {dto}))
+    this.client.emit({cmd: "leads.microservice: updateOne"}, {dto})
+  }
+
+  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+    this.client.emit({cmd: "leads.microservice: updateStatus"}, {dto})
   }
 
   async deleteOne(id: string): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "leads.microservice: deleteOne"}, {id}))
+    this.client.emit({cmd: "leads.microservice: deleteOne"}, {id})
   }
 }

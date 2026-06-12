@@ -8,6 +8,7 @@ import {RMQ_EVENTS_CLIENT_ID} from "./constants/constants";
 import {ClientProxy} from "@nestjs/microservices";
 import type {Cache} from "cache-manager";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
+import {UpdateStatusDto} from "./dto/update-status.dto";
 
 @Injectable()
 export class AppService {
@@ -71,13 +72,23 @@ export class AppService {
   }
 
   async updateOne(dto: UpdateLeadDto): Promise<void> {
-    const {id, name, email, phone, status, source, ownerId} = dto;
+    const {id} = dto;
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
     this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "updated", actorId: dto.ownerId, subjectId: target.id })
-    await this.leadRepo.update(id, {name, email, phone, status, source, ownerId});
+    await this.leadRepo.update(id, dto)
+  }
+
+  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+    const {id} = dto;
+    const target = await this.findOne(id)
+    if (!target) {
+      throw new NotFoundException(`LeadEntity with id ${id} not found`);
+    }
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "status_changed", actorId: "mock", subjectId: target.id })
+    await this.leadRepo.update(id, dto);
   }
 
   async deleteOne(id: string): Promise<void> {

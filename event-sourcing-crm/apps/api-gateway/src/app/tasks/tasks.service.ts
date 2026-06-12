@@ -45,14 +45,14 @@ export class TasksService {
   }
 
   async updateOne(dto: UpdateTaskDto): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "tasks.microservice: updateOne"}, {dto}))
+    this.client.emit({cmd: "tasks.microservice: updateOne"}, {dto})
   }
 
   async updateStatus(dto: UpdateStatusDto): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "tasks.microservice: updateStatus"}, {dto}))
+    this.client.emit({cmd: "tasks.microservice: updateStatus"}, {dto})
   }
 
   async deleteOne(id: string): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "tasks.microservice: deleteOne"}, {id}))
+    this.client.emit({cmd: "tasks.microservice: deleteOne"}, {id})
   }
 }

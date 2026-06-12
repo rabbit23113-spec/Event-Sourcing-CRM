@@ -29,14 +29,14 @@ export class DealsService {
   }
 
   async updateOne(dto: UpdateDealDto): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "deals.microservice: updateOne"}, {dto}))
+    this.client.emit({cmd: "deals.microservice: updateOne"}, {dto})
   }
 
   async updateStatus(dto: UpdateStatusDto): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "deals.microservice: updateStatus"}, {dto}))
+    this.client.emit({cmd: "deals.microservice: updateStatus"}, {dto})
   }
 
   async deleteOne(id: string): Promise<void> {
-    return await firstValueFrom(this.client.emit({cmd: "deals.microservice: deleteOne"}, {id}))
+    this.client.emit({cmd: "deals.microservice: deleteOne"}, {id})
   }
 }

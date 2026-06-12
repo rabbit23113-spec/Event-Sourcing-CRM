@@ -33,12 +33,6 @@ export class UpdateLeadDto {
   source?: string;
 
   @ApiProperty({ required: false })
-  @IsEnum(Status)
-  @IsNotEmpty()
-  @IsOptional()
-  status?: Status;
-
-  @ApiProperty({ required: false })
   @IsUUID()
   @IsNotEmpty()
   @IsOptional()
