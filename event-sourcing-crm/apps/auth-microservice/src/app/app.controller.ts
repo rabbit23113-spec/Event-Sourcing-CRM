@@ -32,13 +32,13 @@ export class AppController {
   }
 
   @MessagePattern({cmd: "auth.microservice: signUp"})
-  async signUp(@Payload() payload: { dto: SignUpDto }): Promise<AccessTokenDto> {
-    return await this.appService.signUp(payload.dto);
+  async signUp(@Payload() payload: { dto: SignUpDto, ip: string }): Promise<AccessTokenDto> {
+    return await this.appService.signUp(payload.dto, payload.ip);
   }
 
   @MessagePattern({cmd: "auth.microservice: signIn"})
-  async signIn(@Payload() payload: { dto: SignInDto }): Promise<AccessTokenDto> {
-    return await this.appService.signIn(payload.dto);
+  async signIn(@Payload() payload: { dto: SignInDto, ip: string }): Promise<AccessTokenDto> {
+    return await this.appService.signIn(payload.dto, payload.ip);
   }
 
   @EventPattern({cmd: "auth.microservice: logOut"})
