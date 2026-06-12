@@ -4,6 +4,7 @@ import {Priority, Status, TaskEntity} from "./entities/task.entity";
 import {CreateTaskDto} from "./dto/create-task.dto";
 import {UpdateTaskDto} from "./dto/update-task.dto";
 import {EventPattern, MessagePattern, Payload} from "@nestjs/microservices";
+import {UpdateStatusDto} from "./dto/update-status.dto";
 
 @Controller()
 export class AppController {
@@ -53,6 +54,11 @@ export class AppController {
   @EventPattern({cmd: "tasks.microservice: updateOne"})
   async updateOne(@Payload() payload: { dto: UpdateTaskDto }): Promise<void> {
     return await this.appService.updateOne(payload.dto);
+  }
+
+  @EventPattern({cmd: "tasks.microservice: updateStatus"})
+  async updateStatus(@Payload() payload: { dto: UpdateStatusDto }): Promise<void> {
+    return await this.appService.updateStatus(payload.dto);
   }
 
   @EventPattern({cmd: "tasks.microservice: deleteOne"})

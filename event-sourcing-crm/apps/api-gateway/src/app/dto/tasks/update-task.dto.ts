@@ -22,12 +22,6 @@ export class UpdateTaskDto {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({ enum: Status, required: false })
-  @IsNotEmpty()
-  @IsEnum(Status)
-  @IsOptional()
-  status?: Status;
-
   @ApiProperty({ enum: Priority, required: false })
   @IsNotEmpty()
   @IsEnum(Priority)

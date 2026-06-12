@@ -5,6 +5,7 @@ import {firstValueFrom} from "rxjs";
 import {Priority, Status, TaskDto} from "../dto/tasks/task.dto";
 import {CreateTaskDto} from "../dto/tasks/create-task.dto";
 import {UpdateTaskDto} from "../dto/tasks/update-task.dto";
+import {UpdateStatusDto} from "../dto/tasks/update-status.dto";
 
 @Injectable()
 export class TasksService {
@@ -45,6 +46,10 @@ export class TasksService {
 
   async updateOne(dto: UpdateTaskDto): Promise<void> {
     return await firstValueFrom(this.client.emit({cmd: "tasks.microservice: updateOne"}, {dto}))
+  }
+
+  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+    return await firstValueFrom(this.client.emit({cmd: "tasks.microservice: updateStatus"}, {dto}))
   }
 
   async deleteOne(id: string): Promise<void> {

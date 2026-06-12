@@ -4,6 +4,7 @@ import {Priority, Status, TaskDto} from "../dto/tasks/task.dto";
 import {CreateTaskDto} from "../dto/tasks/create-task.dto";
 import {UpdateTaskDto} from "../dto/tasks/update-task.dto";
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
+import {UpdateStatusDto} from "../dto/tasks/update-status.dto";
 
 @Controller('tasks')
 export class TasksController {
@@ -61,7 +62,7 @@ export class TasksController {
   @ApiParam({name: "status"})
   @ApiResponse({status: 200, type: TaskDto, isArray: true})
   @Get("find/status/:status")
-  async findByStatus(@Param("status", new ParseEnumPipe(Status))status: Status): Promise<TaskDto[]> {
+  async findByStatus(@Param("status", new ParseEnumPipe(Status)) status: Status): Promise<TaskDto[]> {
     return await this.tasksService.findByStatus(status);
   }
 
@@ -77,6 +78,13 @@ export class TasksController {
   @Patch("update")
   async updateOne(@Body() dto: UpdateTaskDto): Promise<void> {
     return await this.tasksService.updateOne(dto)
+  }
+
+  @ApiOperation({summary: "Update task by status"})
+  @ApiResponse({status: 204})
+  @Patch("update/status")
+  async updateStatus(@Body() dto: UpdateStatusDto): Promise<void> {
+    return await this.tasksService.updateStatus(dto)
   }
 
   @ApiOperation({summary: "Delete task"})

@@ -8,6 +8,7 @@ import {UpdateTaskDto} from "./dto/update-task.dto";
 import {CreateTaskDto} from "./dto/create-task.dto";
 import type {Cache} from "cache-manager";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
+import {UpdateStatusDto} from "./dto/update-status.dto";
 
 @Injectable()
 export class AppService {
@@ -118,18 +119,7 @@ export class AppService {
   }
 
   async updateOne(dto: UpdateTaskDto): Promise<void> {
-    const {
-      id,
-      title,
-      description,
-      status,
-      priority,
-      dueDate,
-      assigneeId,
-      relatedLeadId,
-      relatedClientId,
-      relatedDealId
-    } = dto;
+    const {id} = dto;
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`TaskEntity with id ${id} not found`);
@@ -140,17 +130,22 @@ export class AppService {
       actorId: dto.assigneeId,
       subjectId: target.id
     })
-    await this.taskRepo.update(id, {
-      title,
-      description,
-      status,
-      priority,
-      dueDate,
-      assigneeId,
-      relatedLeadId,
-      relatedClientId,
-      relatedDealId
-    });
+    await this.taskRepo.update(id, dto)
+  }
+
+  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+    const {id} = dto;
+    const target = await this.findOne(id)
+    if (!target) {
+      throw new NotFoundException(`TaskEntity with id ${id} not found`);
+    }
+    await this.taskRepo.update(id, dto)
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "task",
+      action: "status_changed",
+      actorId: "mock",
+      subjectId: target.id
+    })
   }
 
   async deleteOne(id: string): Promise<void> {
