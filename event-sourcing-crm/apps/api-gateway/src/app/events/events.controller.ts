@@ -64,11 +64,4 @@ export class EventsController {
   async findByAction(@Param("action", new ParseEnumPipe(Action)) action: Action): Promise<EventDto[]> {
     return await this.eventsService.findByAction(action)
   }
-
-  @ApiOperation({summary: "Create event"})
-  @ApiResponse({status: 201})
-  @Post("create")
-  async createOne(@Body() body: CreateEventDto): Promise<EventDto> {
-    return await this.eventsService.createOne(body);
-  }
 }

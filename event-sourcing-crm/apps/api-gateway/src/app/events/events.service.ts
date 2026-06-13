@@ -34,10 +34,4 @@ export class EventsService {
   async findByAction(action: Action) {
     return await firstValueFrom(this.client.send({cmd: "events.microservice: findByAction"}, {action}))
   }
-
-  async createOne(dto: CreateEventDto): Promise<EventDto> {
-    const event = await firstValueFrom(this.client.send({cmd: "events.microservice: createOne"}, {dto}))
-    await this.eventsGateway.handleMessage(event)
-    return event
-  }
 }

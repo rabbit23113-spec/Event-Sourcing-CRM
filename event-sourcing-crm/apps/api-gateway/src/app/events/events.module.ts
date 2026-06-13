@@ -2,7 +2,6 @@ import {Module} from '@nestjs/common';
 import {EventsService} from './events.service';
 import {EventsController} from './events.controller';
 import {ClientsModule, Transport} from "@nestjs/microservices";
-import { EventsGateway } from './events.gateway';
 import * as constants from "../constants/constants"
 
 @Module({
@@ -20,7 +19,7 @@ import * as constants from "../constants/constants"
     }]),
   ],
   controllers: [EventsController],
-  providers: [EventsService, EventsGateway],
+  providers: [EventsService],
 })
 export class EventsModule {
 }

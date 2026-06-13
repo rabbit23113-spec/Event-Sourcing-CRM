@@ -43,7 +43,7 @@ export class TasksService {
 
   async createOne(dto: CreateTaskDto, actorId: string): Promise<TaskDto> {
     const task = await firstValueFrom(this.client.send({cmd: "tasks.microservice: createOne"}, {dto, actorId}))
-    await this.tasksGateway.handleMessage(task)
+    await this.tasksGateway.emitTask(task)
     return task
   }
 

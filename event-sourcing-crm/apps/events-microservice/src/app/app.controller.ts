@@ -38,8 +38,8 @@ export class AppController {
     return await this.appService.findByAction(payload.action);
   }
 
-  @MessagePattern({cmd: "events.microservice: createOne"})
+  @EventPattern({cmd: "events.microservice: createOne"})
   async createOne(@Payload() payload: CreateEventDto) {
-    return await this.appService.createOne(payload)
+    await this.appService.createOne(payload)
   }
 }

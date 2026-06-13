@@ -86,9 +86,8 @@ export class AppService {
     return result;
   }
 
-  async createOne(dto: CreateEventDto): Promise<EventEntity> {
+  async createOne(dto: CreateEventDto): Promise<void> {
     const target: EventEntity = this.eventsRepo.create(dto);
     await this.eventsRepo.save(target);
-    return target
   }
 }
