@@ -29,8 +29,22 @@ import {CacheModule} from "@nestjs/cache-manager";
         queueOptions: {
           durable: true,
         },
+
+      },
+
+    },
+      {
+        name: constants.RMQ_USERS_CLIENT_ID,
+        transport: Transport.RMQ,
+        options: {
+          urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
+          queue: constants.RMQ_USERS_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+        }
       }
-    }]),
+    ]),
     CacheModule.register({
       store: redisStore,
       host: constants.REDIS_HOST,

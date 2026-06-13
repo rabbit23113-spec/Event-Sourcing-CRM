@@ -9,12 +9,15 @@ import {ClientProxy} from "@nestjs/microservices";
 import type {Cache} from "cache-manager";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
 import {UpdateStatusDto} from "./dto/update-status.dto";
+import {RMQ_USERS_CLIENT_ID} from "./constants/constants";
+import {firstValueFrom} from "rxjs";
 
 @Injectable()
 export class AppService {
   constructor(@InjectRepository(LeadEntity) private readonly leadRepo: Repository<LeadEntity>,
               @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
-              @Inject(CACHE_MANAGER) private readonly cache: Cache
+              @Inject(CACHE_MANAGER) private readonly cache: Cache,
+              @Inject(RMQ_USERS_CLIENT_ID) private readonly usersClient: ClientProxy,
   ) {
   }
 
@@ -65,6 +68,10 @@ export class AppService {
   }
 
   async createOne(dto: CreateLeadDto, actorId: string): Promise<LeadEntity> {
+    const user = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findOne"}, {id: dto.ownerId}))
+    if (!user) {
+      throw new NotFoundException("Incorrect owner id")
+    }
     const lead = await this.leadRepo.create(dto);
     await this.leadRepo.save(lead);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
@@ -81,6 +88,12 @@ export class AppService {
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
+    }
+    if (dto.ownerId) {
+      const user = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findOne"}, {id: dto.ownerId}))
+      if (!user) {
+        throw new NotFoundException("Incorrect owner id")
+      }
     }
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "lead",
