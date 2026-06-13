@@ -47,7 +47,7 @@ export class UsersController {
 
   @ApiOperation({summary: "Get user by email"})
   @ApiResponse({status: 200, type: UserDto})
-  @Get("find/email")
+  @Post("find/email")
   async findOneByEmail(@Body("email") dto: FindByEmailDto): Promise<UserDto> {
     return await this.usersService.findOneByEmail(dto.email);
   }
