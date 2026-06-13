@@ -10,49 +10,25 @@
       "path": "./apps/api-gateway"
     },
     {
-      "path": "./apps/events-microservice-e2e"
-    },
-    {
       "path": "./apps/events-microservice"
-    },
-    {
-      "path": "./apps/users-microservice-e2e"
     },
     {
       "path": "./apps/users-microservice"
     },
     {
-      "path": "./apps/leads-microservice-e2e"
-    },
-    {
       "path": "./apps/leads-microservice"
-    },
-    {
-      "path": "./apps/clients-microservice-e2e"
     },
     {
       "path": "./apps/clients-microservice"
     },
     {
-      "path": "./apps/deals-microservice-e2e"
-    },
-    {
       "path": "./apps/deals-microservice"
-    },
-    {
-      "path": "./apps/notes-microservice-e2e"
     },
     {
       "path": "./apps/notes-microservice"
     },
     {
-      "path": "./apps/tasks-microservice-e2e"
-    },
-    {
       "path": "./apps/tasks-microservice"
-    },
-    {
-      "path": "./apps/auth-microservice-e2e"
     },
     {
       "path": "./apps/auth-microservice"
