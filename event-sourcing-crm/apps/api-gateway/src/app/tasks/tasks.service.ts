@@ -10,7 +10,7 @@ import {TasksGateway} from "./tasks.gateway";
 
 @Injectable()
 export class TasksService {
-  constructor(@Inject(RMQ_TASKS_CLIENT_ID) private readonly client: ClientProxy, @Inject(TasksGateway) private readonly tasksGateway: TasksGateway,) {
+  constructor(@Inject(RMQ_TASKS_CLIENT_ID) private readonly client: ClientProxy, private readonly tasksGateway: TasksGateway,) {
   }
 
   async findAll(): Promise<TaskDto[]> {
