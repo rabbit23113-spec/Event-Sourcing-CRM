@@ -10,9 +10,9 @@ export const HeaderNav = () => {
             <PopoverPanel className={"absolute z-50 top-full left=0 m-4 border border-border rounded-md"}>
                 <div className={"h-fit rounded-md flex flex-col items-start justify-start bg-card"}>
                     <LinkBlock href={"/"} name={"Главная"} iconName={"home-03"} />
-                    <LinkBlock href={"/"} name={"Дашборд"} iconName={"dashboard-square-01"} />
-                    <LinkBlock href={"/"} name={"Настройки"} iconName={"setting-01"} />
-                    <LinkBlock href={"/"} name={"Журнал аудита"} iconName={"audit-02"} />
+                    <LinkBlock href={"/dashboard"} name={"Дашборд"} iconName={"dashboard-square-01"} />
+                    <LinkBlock href={"/settings"} name={"Настройки"} iconName={"setting-01"} />
+                    <LinkBlock href={"/events"} name={"Журнал аудита"} iconName={"audit-02"} />
                 </div>
             </PopoverPanel>
         </Popover>
@@ -22,9 +22,9 @@ export const HeaderNav = () => {
             </PopoverButton>
             <PopoverPanel className={"absolute top-full z-50 left=0 m-4 border border-border rounded-md "}>
                 <div className={"h-fit rounded-md flex flex-col items-start justify-start bg-card"}>
-                    <LinkBlock href={"/"} name={"Сделки"} iconName={"briefcase-01"} />
-                    <LinkBlock href={"/"} name={"Лиды"} iconName={"user-question-01"} />
-                    <LinkBlock href={"/"} name={"Клиенты"} iconName={"user"} />
+                    <LinkBlock href={"/deals"} name={"Сделки"} iconName={"briefcase-01"} />
+                    <LinkBlock href={"/leads"} name={"Лиды"} iconName={"user-question-01"} />
+                    <LinkBlock href={"/clients"} name={"Клиенты"} iconName={"user"} />
                 </div>
             </PopoverPanel>
         </Popover>
@@ -34,8 +34,8 @@ export const HeaderNav = () => {
             </PopoverButton>
             <PopoverPanel className={"absolute top-full z-50 left=0 m-4 border border-border rounded-md"}>
                 <div className={"h-fit rounded-md flex flex-col items-start justify-start bg-card"}>
-                    <LinkBlock href={"/"} name={"Аналитика"} iconName={"analytics-01"} />
-                    <LinkBlock href={"/"} name={"Задачи"} iconName={"sticky-note-02"} />
+                    <LinkBlock href={"/analytics"} name={"Аналитика"} iconName={"analytics-01"} />
+                    <LinkBlock href={"/tasks"} name={"Задачи"} iconName={"sticky-note-02"} />
                 </div>
             </PopoverPanel>
         </Popover>
