@@ -1,4 +1,4 @@
-"use client"
+"use ClientComponent"
 
 import Input from "@/app/components/misc/CustomInputComponent";
 import {Checkbox} from "@headlessui/react";

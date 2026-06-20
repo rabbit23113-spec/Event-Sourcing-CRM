@@ -1,4 +1,4 @@
-"use client"
+"use ClientComponent"
 
 import Copyright from "@/app/components/misc/CopyrightComponent";
 

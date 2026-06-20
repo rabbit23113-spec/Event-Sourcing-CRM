@@ -6,14 +6,14 @@ export const EventComponent = (props: {
     createdAt: Date;
 }) => {
     return (
-        <div className={"px-5 py-2.5 w-7xl text-foreground flex items-center justify-between shadow-sm"}>
+        <div className={"rounded-md p-8 w-full gap-8 text-foreground flex items-center justify-center bg-card"}>
             <div className={"flex flex-col gap-1"}>
                 <div className={"font-medium"}>Домен</div>
                 <div className={"text-sm"}>{props.domain}</div>
             </div>
             <div className={"flex flex-col gap-1"}>
                 <div className={"font-medium"}>Действие</div>
-                <div className={"text-sm p-1 bg-success rounded-md text-card"}>{props.action}</div>
+                <div className={"text-sm text-success"}>{props.action}</div>
             </div>
             <div className={"flex flex-col gap-1"}>
                 <div className={"font-medium"}>Совершил</div>

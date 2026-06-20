@@ -1,3 +1,5 @@
+"use client"
+
 import {JSX, useState} from "react";
 import {Checkbox, CheckboxProps} from "@headlessui/react";
 

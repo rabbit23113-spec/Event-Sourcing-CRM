@@ -1,8 +1,8 @@
-"use client"
+"use ClientComponent"
 
 import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import {RechartsDevtools} from "@recharts/devtools";
-import TaskComponent from "@/app/components/tasks/task";
+import TaskComponent from "@/app/components/tasks/TaskComponent";
 import CustomButton from "@/app/components/misc/CustomButtonComponent";
 
 const DashboardPage = () => {

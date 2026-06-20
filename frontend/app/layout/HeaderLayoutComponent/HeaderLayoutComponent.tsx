@@ -1,4 +1,4 @@
-"use client"
+"use ClientComponent"
 
 import HeaderNavigationComponent from "@/app/components/header/HeaderNavigationComponent";
 import CustomButton from "@/app/components/misc/CustomButtonComponent";
