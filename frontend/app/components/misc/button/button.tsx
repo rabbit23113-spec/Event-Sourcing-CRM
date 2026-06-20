@@ -6,11 +6,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const CustomButton = ({variant, className, children, ...props}: ButtonProps) => {
-    const base = "px-3 py-2 rounded-md text-3.5";
+    const base = "p-3 text-sm font-roboto font-medium min-w-20 rounded-md";
 
     const variants = {
         primary: "bg-primary text-white hover:bg-primary-hover",
-        outline: "border border-border text-foreground hover:bg-card-hover",
+        outline: "bg-card border border-border text-foreground hover:bg-card-hover",
         success: "bg-success text-white",
         danger: "bg-danger text-white",
     };

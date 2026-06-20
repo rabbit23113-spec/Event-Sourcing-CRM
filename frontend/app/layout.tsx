@@ -1,7 +1,7 @@
 import type {Metadata} from "next";
 import "./globals.css";
-import Header from "@/app/layout/header";
 import Footer from "@/app/layout/footer";
+import { Open_Sans, Roboto } from "next/font/google";
 
 export const metadata: Metadata = {
     title: "Event Sourcing CRM",
@@ -11,6 +11,19 @@ export const metadata: Metadata = {
     }
 };
 
+export const openSans = Open_Sans({
+    subsets: ["latin"],
+    variable: "--font-opensans",
+    display: "swap",
+});
+
+export const roboto = Roboto({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+    variable: "--font-roboto",
+    display: "swap",
+});
+
 export default function RootLayout({
                                        children,
                                    }: Readonly<{
@@ -19,11 +32,10 @@ export default function RootLayout({
     return (
         <html
             lang="en"
-            className={`h-full antialiased`}
+            className={`h-full antialiased ${openSans} ${roboto}`}
 
         >
         <body className="bg-bg min-h-full flex flex-col">
-        <Header/>
         {children}
         <Footer/>
         </body>

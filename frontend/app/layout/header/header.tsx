@@ -1,15 +1,16 @@
 "use client"
 
-import Logo from "@/app/components/misc/logo";
-import HeaderAuthButtons from "@/app/components/header/headerAuthButtons";
-import HeaderNav from "@/app/components/header/headerNav";
+import HeaderNav from "@/app/components/header/HeaderNavigationComponent";
+import CustomButton from "@/app/components/misc/button";
+import Link from "next/link";
 
 export const Header = () => {
     return (
-        <header className={"border border-border h-28 w-full flex items-center justify-between px-24"}>
-            <Logo />
-            <HeaderNav />
-            <HeaderAuthButtons />
+        <header className={"w-full h-8 p-8 bg-card border-b border-border flex items-center justify-between top-0 fixed"}>
+            <HeaderNav/>
+            <Link href="/signup">
+                <CustomButton variant={"primary"}>Войти</CustomButton>
+            </Link>
         </header>
     )
 }
