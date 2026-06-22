@@ -1,101 +1,98 @@
-# EventSourcingCrm
+# Event Sourcing CRM
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Данный проект представляет собой MVP CRM, спроектированную на микросервисной архитектуре и коммуникацией посредством брокера сообщений.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Описание
 
-## Run tasks
+Проект представляет собой CRM с минимальным рабочим функционалом для управления лидами, сделками, клиентами и задачами.
 
-To run the dev server for your app, use:
+Проект включает в себя:
+- микросервисную архитектуру
+- event-driven взаимодействие
+- реализацию некоторых паттернов проектирования распределенных систем
 
-```sh
-npx nx serve api-gateway
-```
+---
 
-To create a production bundle:
+## Функциональность
 
-```sh
-npx nx build api-gateway
-```
+- Управление лидами, сделками, клиентами и задачами
+- минимальный RBAC: sales/manager/administrator
+- Асинхронное взаимодействие сервисов через события
+- Журнал-аудит действий
 
-To see all available targets to run for a project, run:
+---
 
-```sh
-npx nx show project api-gateway
-```
+## Архитектура
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+Система построена на микросервисах, взаимодействующих между собой через событийную шину.
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+В качестве брокера сообщений я выбрал **RabbitMQ**, так как этот брокер сообщений обеспечивает более низкую сложность эксплуатации в сравнении с Kafka.
+Для кэширования выбран Redis за счет быстрого доступа к данным.
 
-## Add new projects
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+### Полный список сервисов:
 
-Use the plugin's generator to create new projects.
+- **API Gateway** — точка входа в приложение по HTTP, отвечает за маршрутизацию и обращение в микросервисы.
+- **Auth Sessions Service** — осуществление аутентификации (пока что) только через JWT. В будущем будет добавлен вход через Google за счет технологии OAuth.
+- **Events Service** - сервис, отвечающий за создание событий из других микросервисов в базе данных. Необходим для поддержки наглядного журнала аудита.
+- **Leads Service** - сервис лидов.
+- **Clients Service** - сервис клиентов.
+- **Deals Service** - сервис сделок.
+- **Tasks Service** - сервис задач.
+- **Notes Service** - сервис заметок.
+- **Users Service** - сервис пользователей.
 
-To generate a new application, use:
+### Типы взаимодействия:
 
-```sh
-npx nx g @nx/node:app demo
-```
+- Синхронное: REST HTTP
+- Асинхронное: RabbitMQ
 
-To generate a new library, use:
+### Используемые паттерны:
 
-```sh
-npx nx g @nx/node:lib mylib
-```
+- Event-driven architecture
+- API Gateway
+- Кэширование Redis
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+---
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Стек технологий
 
-## Set up CI!
+### Backend
+- Фреймворк NestJS
+- Язык программирования TypeScript
+- PostgreSQL
+- Redis
 
-### Step 1
+### Брокер сообщений
+- RabbitMQ
 
-To connect to Nx Cloud, run the following command:
+### Инфраструктура
+- Docker
 
-```sh
-npx nx connect
-```
+### Frontend (временно в стадии разработки)
+- React
+- TypeScript
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+---
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Пример потока событий
 
-### Step 2
+[crm_system_design.drawio](https://github.com/user-attachments/files/29223306/crm_system_design.drawio)
 
-Use the following command to configure a CI workflow for your workspace:
+---
 
-```sh
-npx nx g ci-workflow
-```
+## Быстрый старт
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Требования
+- Docker
+- Node.js 20+
 
-## Install Nx Console
+### Запуск проекта
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/node?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+git clone https://github.com/rabbit23113-spec/Event-Sourcing-CRM.git
+cd event-sourcing-crm
+npm run setup
+docker-compose up --build
