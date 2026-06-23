@@ -1,9 +1,7 @@
-"use ClientComponent"
+"use client"
 
-import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
-import {RechartsDevtools} from "@recharts/devtools";
-import TaskComponent from "@/app/components/tasks/TaskComponent";
-import CustomButton from "@/app/components/misc/CustomButtonComponent";
+import {Line, LineChart, ResponsiveContainer, XAxis, YAxis} from "recharts";
+import AsideLayoutComponent from "@/app/layout/AsideLayoutComponent";
 
 const DashboardPage = () => {
     const data = [
@@ -21,38 +19,62 @@ const DashboardPage = () => {
         {name: 'Дек', сумма: 330000},
     ];
     return (
-        <div className={"min-h-screen w-full justify-around items-center flex my-10 flex-col"}>
-            <div className={"font-medium text-4xl"}>
-                Быстрая аналитика
-            </div>
-            <div className={"flex justify-center gap-20 items-center w-full p-15"}>
-                <div>
-                    <div className={"font-medium"}>
-                        Статистика
+        <div className={"min-h-screen w-full justify-between items-center flex flex-col"}>
+            <div className={"p-8 flex flex-col justify-center h-full gap-12"}>
+                <div className={"w-full gap-4 grid grid-cols-6"}>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Новых задач за сегодня</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>12</div>
                     </div>
-                    <div className={"grid grid-cols-2 gap-4"}>
-                        <div className={"flex justify-between w-80 h-85 p-5 shadow-sm rounded-md flex-col"}>
-                            <div className={"font-medium text-2xl"}>Число клиентов</div>
-                            <div className={"w-full flex justify-end text-4xl font-bold"}>28</div>
-                        </div>
-                        <div className={"flex justify-between w-80 h-85 p-5 shadow-sm rounded-md flex-col"}>
-                            <div className={"font-medium text-2xl"}>Активные сделки</div>
-                            <div className={"w-full flex justify-end text-4xl font-bold"}>17</div>
-                        </div>
-                        <div className={"flex justify-between w-80 h-85 p-5 bg-error text-card rounded-md flex-col"}>
-                            <div className={"font-medium text-2xl"}>Проваленные задачи</div>
-                            <div className={"w-full flex justify-end text-4xl font-bold"}>3</div>
-                        </div>
-                        <div
-                            className={"flex justify-between w-80 h-85 p-5 text-card bg-foreground shadow-sm rounded-md flex-col"}>
-                            <div className={"font-medium text-2xl"}>Сумма активных сделок</div>
-                            <div className={"w-full flex justify-end text-4xl font-bold"}>2.000.000 ₽</div>
-                        </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Активных клиентов</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>48</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Открытых сделок</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>6</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Сумма открытых сделок</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>4.643.000 ₽</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Конверсия лид → клиент</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>39%</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Выручка за неделю</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>1.289.000 ₽</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Сотрудников онлайн</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>7</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Задач в работе</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>17</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Среднее время выполнения задачи</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>18.4 часа</div>
+                    </div>
+                    <div className={"flex justify-between bg-card w-60 h-60 p-4 shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Активные сделки</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>17</div>
+                    </div>
+                    <div className={"flex justify-between w-60 h-60 p-4 bg-error text-foreground rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Просроченных задач</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>2</div>
+                    </div>
+                    <div
+                        className={"flex justify-between w-60 h-60 p-4 text-foreground bg-success shadow-sm rounded-md flex-col"}>
+                        <div className={"font-medium text-xl"}>Выполненных задач</div>
+                        <div className={"w-full flex justify-end text-2xl font-bold"}>4</div>
                     </div>
                 </div>
                 <div className={"flex flex-col gap-4"}>
                     <div className={"font-medium text-2xl"}>График выручки по месяцам</div>
-                    <div className="w-200 h-160 bg-card">
+                    <div className="h-70">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={data}>
                                 <XAxis dataKey="name"/>
@@ -63,61 +85,9 @@ const DashboardPage = () => {
                     </div>
                 </div>
             </div>
-            <div className={"font-medium text-4xl"}>
-                Мои задачи
-            </div>
             <div>
-                <div className={"flex justify-bas flex-col gap-6 items-start w-full p-15"}>
-                    <div className={"flex gap-4"}>
-                        <TaskComponent
-                            title={"Разработать макет"}
-                            description={""}
-                            priority={"Высокий"}
-                            assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                            createdAt={new Date()} updatedAt={new Date()}
-                        />
-                        <TaskComponent
-                            title={"Разработать макет"}
-                            description={""}
-                            priority={"Высокий"}
-                            assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                            createdAt={new Date()} updatedAt={new Date()}
-                        />
-                        <TaskComponent
-                            title={"Разработать макет"}
-                            description={""}
-                            priority={"Высокий"}
-                            assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                            createdAt={new Date()} updatedAt={new Date()}
-                        />
-                        <TaskComponent
-                            title={"Разработать макет"}
-                            description={""}
-                            priority={"Высокий"}
-                            assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                            createdAt={new Date()} updatedAt={new Date()}
-                        />
-                        <TaskComponent
-                            title={"Разработать макет"}
-                            description={""}
-                            priority={"Высокий"}
-                            assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                            createdAt={new Date()} updatedAt={new Date()}
-                        />
-                    </div>
-                    <CustomButton variant={"primary"}>Перейти ко всем задачам</CustomButton>
-                </div>
             </div>
-            <div className={"flex flex-col gap-6 items-center justify-center"}>
-                <div className={"font-medium text-4xl"}>
-                    Быстрые действия
-                </div>
-                <div className={"flex gap-4"}>
-                    <CustomButton variant={"primary"}>Новый лид</CustomButton>
-                    <CustomButton variant={"primary"}>Новая сделка</CustomButton>
-                    <CustomButton variant={"primary"}>Новый клиент</CustomButton>
-                </div>
-            </div>
+            <AsideLayoutComponent/>
         </div>
     )
 }

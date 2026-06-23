@@ -10,8 +10,8 @@ export const DealComponent = (props: {
     updatedAt: Date;
 }) => {
     return (
-        <div className={"p-3 bg-card text-foreground border border-border rounded-md flex gap-6 flex-col"}>
-            <div className={"flex justify-between items-center gap-4"}>
+        <div className={"hover:bg-card-hover p-4 w-100 items-start justify-center bg-card text-foreground border border-border rounded-md flex gap-6 flex-col"}>
+            <div className={"flex justify-between items-center gap-4 w-full"}>
                 <div className={"text-2xl"}>{props.title}</div>
                 <div className={"p-2.5 bg-primary text-card rounded-md"}>{props.status}</div>
             </div>

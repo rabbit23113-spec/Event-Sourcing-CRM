@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const AsideLayoutComponent = () => {
     return (
-        <div className={"w-max h-full flex flex-col justify-evenly p-4 bg-card border border-border absolute left-0"}>
+        <div className={"w-max min-h-full flex flex-col justify-evenly p-4 bg-card border border-border fixed top-0 left-0"}>
             <div className={"flex flex-col gap-2"}>
                 <div>Главная</div>
                 <div className={"flex flex-col gap-1"}>

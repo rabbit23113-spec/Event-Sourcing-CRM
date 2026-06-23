@@ -1,3 +1,5 @@
+import HeaderLayoutComponent from "@/app/layout/HeaderLayoutComponent";
+
 "use ClientComponent"
 
 import Input from "@/app/components/misc/CustomInputComponent";
@@ -5,9 +7,11 @@ import {Checkbox} from "@headlessui/react";
 import CustomButton from "@/app/components/misc/CustomButtonComponent";
 import CustomCheckbox from "@/app/components/misc/CustomCheckboxComponent";
 import Link from "next/link";
+import FooterLayoutComponent from "@/app/layout/FooterLayoutComponent";
 
 const SignInPage = () => {
     return <div className={"min-h-screen w-full justify-center items-center flex flex-col gap-6"}>
+        <HeaderLayoutComponent />
         <div className={"flex flex-col gap-6 justify-center items-start"}>
             <div className={"text-foreground text-xl"}>
                 Вход в систему
@@ -22,6 +26,7 @@ const SignInPage = () => {
             </div>
             <CustomButton variant={"primary"}>Войти</CustomButton>
         </div>
+        <FooterLayoutComponent />
     </div>
 }
 
